@@ -1,6 +1,5 @@
 # 简历 — JD 匹配器
 
-[![CI](https://github.com/13716710623/resume-jd-matcher/actions/workflows/ci.yml/badge.svg)](https://github.com/13716710623/resume-jd-matcher/actions/workflows/ci.yml)
 
 把**你的简历**和**一条招聘 JD** 放进去，10 秒内拿到一份可解释的评估报告：
 
