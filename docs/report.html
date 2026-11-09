@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>人岗匹配评估报告</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#F5F6F7;color:#191919;
+  font:15px/1.65 "MiSans","Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+  padding:32px 20px 60px}
+.wrap{max-width:1080px;margin:0 auto}
+.top{margin-bottom:22px}
+.top h1{font-size:26px;font-weight:700;letter-spacing:.3px}
+.top p{color:#8C8C8C;font-size:13.5px;margin-top:6px}
+.card{background:#fff;border-radius:16px;padding:22px 24px;margin-bottom:16px;
+  box-shadow:0 1px 3px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.04)}
+.card h2{font-size:14px;font-weight:600;color:#8C8C8C;letter-spacing:1px;
+  margin-bottom:16px;text-transform:none}
+.hero{display:flex;align-items:center;gap:34px;flex-wrap:wrap}
+.ring{position:relative;width:150px;height:150px;flex:none}
+.ring svg{transform:rotate(-90deg)}
+.ring .val{position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;flex-direction:column}
+.ring .val b{font-size:34px;font-weight:700;line-height:1}
+.ring .val span{font-size:12px;color:#8C8C8C;margin-top:4px}
+.hero-info{flex:1;min-width:260px}
+.badge{display:inline-block;padding:5px 14px;border-radius:99px;
+  font-size:13px;font-weight:600;color:#fff;background:#FF6900}
+.badge.B{background:#F59E0B}.badge.C{background:#64748B}.badge.D{background:#9CA3AF}
+.verdict{font-size:16px;margin-top:12px;line-height:1.6}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.metric{margin-bottom:14px}
+.metric .row{display:flex;justify-content:space-between;font-size:13.5px;
+  margin-bottom:5px}
+.metric .row span:last-child{color:#8C8C8C;font-variant-numeric:tabular-nums}
+.bar{height:8px;background:#F0F0F0;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:#FF6900}
+.bar i.ok{background:#00A854}.bar i.mid{background:#F59E0B}.bar i.bad{background:#E54D42}
+.tier{display:flex;gap:3px;height:10px;border-radius:99px;overflow:hidden;
+  background:#F0F0F0;margin:6px 0 4px}
+.tier i{display:block;height:100%}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:6px 12px;border-radius:99px;font-size:13px;background:#F5F6F7;
+  border:1px solid #E6E6E6}
+.chip.miss{background:#FEF2F2;border-color:#FECACA;color:#B91C1C}
+.chip.hit{background:#F0FDF4;border-color:#BBF7D0;color:#15803D}
+ul.plain{list-style:none}
+ul.plain li{padding:9px 0;border-bottom:1px solid #F3F4F6;font-size:14px;
+  display:flex;gap:10px;align-items:flex-start}
+ul.plain li:last-child{border:0}
+.ok{color:#00A854;font-weight:700}.no{color:#E54D42;font-weight:700}
+.timeline{list-style:none;position:relative;padding-left:20px}
+.timeline:before{content:"";position:absolute;left:5px;top:6px;bottom:6px;
+  width:2px;background:#FFE0CC}
+.timeline li{position:relative;padding:0 0 16px 12px;font-size:14px}
+.timeline li:before{content:"";position:absolute;left:-17px;top:7px;width:10px;
+  height:10px;border-radius:50%;background:#FF6900;
+  box-shadow:0 0 0 3px #FFF3EB}
+.timeline b{display:inline-block;min-width:56px;color:#FF6900}
+.foot{color:#B0B4BA;font-size:12px;text-align:center;margin-top:26px}
+.sec-note{color:#8C8C8C;font-size:13px;margin-top:-8px;margin-bottom:14px}
+</style></head>
+<body><div class="wrap">
+  <div class="top">
+    <h1>人岗匹配评估报告</h1>
+    <p>简历 149 字　·　JD 231 字　·　生成于 2026-11-08 11:21</p>
+  </div>
+
+  <div class="card">
+    <div class="hero">
+      
+    <div class="ring">
+      <svg width="150" height="150">
+        <circle cx="75" cy="75" r="62" fill="none" stroke="#F0F0F0" stroke-width="12"/>
+        <circle cx="75" cy="75" r="62" fill="none" stroke="#00A854" stroke-width="12"
+                stroke-linecap="round" stroke-dasharray="321.0 389.6"/>
+      </svg>
+      <div class="val"><b>82%</b><span>综合匹配度</span></div>
+    </div>
+      <div class="hero-info">
+        <span class="badge A">竞争力 A</span>
+        <div class="verdict">高度匹配，建议直接投，简历再按 JD 微调关键词</div>
+        <p class="sec-note" style="margin-top:10px">
+          方向：应用 / 落地　·　职级：未写明　·
+          学历门槛：未要求
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>分项评分</h2>
+      <div class="metric"><div class="row"><span>技能匹配</span>
+             <span>82%</span></div>
+             <div class="bar"><i class="ok" style="width:82%"></i></div></div>
+      <div class="metric"><div class="row"><span>经验</span>
+                 <span>JD 未提要求</span></div>
+                 <div class="bar"><i style="width:0"></i></div></div>
+      <div class="metric"><div class="row"><span>学历</span>
+                 <span>JD 未提要求</span></div>
+                 <div class="bar"><i style="width:0"></i></div></div>
+    </div>
+    <div class="card">
+      <h2>要求分级命中</h2>
+      
+              <div class="metric">
+                <div class="row"><span>必须</span>
+                  <span>4/4　100%</span></div>
+                <div class="tier">
+                  <i style="width:100%;background:#E54D42"></i>
+                </div>
+              </div>
+              <div class="metric">
+                <div class="row"><span>应该</span>
+                  <span>3/4　75%</span></div>
+                <div class="tier">
+                  <i style="width:75%;background:#F59E0B"></i>
+                </div>
+              </div>
+              <div class="metric">
+                <div class="row"><span>加分</span>
+                  <span>1/1　100%</span></div>
+                <div class="tier">
+                  <i style="width:100%;background:#00A854"></i>
+                </div>
+              </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>已具备 8 项</h2>
+      <div class="chips"><span class="chip hit">Agent</span><span class="chip hit">LangChain</span><span class="chip hit">RAG</span><span class="chip hit">大模型</span><span class="chip hit">向量库</span><span class="chip hit">提示词</span><span class="chip hit">部署</span><span class="chip hit">微调</span></div>
+    </div>
+    <div class="card">
+      <h2>缺失 1 项</h2>
+      <div class="chips"><span class="chip miss">评测</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>简历质量</h2>
+    <ul class="plain"><li><span class="ok">✓</span><span><b>篇幅</b>　148 字，长度合适</span></li><li><span class="no">✗</span><span><b>量化成果</b>　没有数据，全是形容词，说服力弱</span></li><li><span class="ok">✓</span><span><b>项目描述</b>　出现 3 类项目动词</span></li><li><span class="no">✗</span><span><b>技能呈现</b>　建议区分「精通 / 熟悉 / 了解」，别一锅端</span></li></ul>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>可能的面试问题</h2>
+      <ul class="plain"><li>【追问】你说熟悉 Agent，讲一个具体项目：怎么做的？效果怎么衡量？</li><li>【追问】你说熟悉 LangChain，讲一个具体项目：怎么做的？效果怎么衡量？</li><li>【缺口】JD 要求 评测，你目前没相关经历——面试官大概率会问你怎么补</li><li>【通用】这个岗位最看重什么？你为什么觉得自己合适？</li></ul>
+    </div>
+    <div class="card">
+      <h2>行动清单</h2>
+      <ul class="timeline"><li><b>本周</b>改简历：量化成果 —— 没有数据，全是形容词，说服力弱</li><li><b>两周内</b>补 评测：做一个能演示的小项目，写进简历</li></ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>改进建议</h2>
+    <ul class="plain"><li>【简历】量化成果：没有数据，全是形容词，说服力弱</li><li>【简历】技能呈现：建议区分「精通 / 熟悉 / 了解」，别一锅端</li><li>【补技能】评测 —— 出现在 1 条要求里，权重 1，优先补</li></ul>
+  </div>
+
+  <p class="foot">由 resume_matcher 生成　·　纯规则、不联网、可解释</p>
+</div></body></html>
