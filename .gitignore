@@ -1,0 +1,8 @@
+﻿__pycache__/
+*.pyc
+.ruff_cache/
+报告.html
+docs/web-demo.html
+feedback.jsonl
+eval_out.txt
+.venv/
