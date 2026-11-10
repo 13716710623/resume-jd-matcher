@@ -2,6 +2,10 @@
 
 [![CI](https://github.com/13716710623/resume-jd-matcher/actions/workflows/ci.yml/badge.svg)](https://github.com/13716710623/resume-jd-matcher/actions/workflows/ci.yml)
 
+![演示](docs/demo_preview_small.gif)
+
+[▶ 观看 90 秒完整演示（配音 + 字幕）](docs/演示视频_成片.mp4)
+
 
 把**你的简历**和**一条招聘 JD** 放进去，10 秒内拿到一份可解释的评估报告：
 
