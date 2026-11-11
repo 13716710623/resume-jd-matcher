@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>简历 — JD 匹配器 · 可解释的人岗匹配评估</title>
+<meta name="description" content="把简历和一条 JD 放进去，10 秒拿到可解释的匹配评估：匹配度、缺口、改进建议、面试预测。纯 Python 规则实现，不联网、不调模型。">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0d0f13; --bg2:#161a21; --fg:#f5f6f8; --dim:#9aa1ae;
+    --accent:#ff6900; --line:#262b34; --card:#14181f;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--fg);
+    font:16px/1.7 "MiSans","Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px}
+
+  /* 顶部 */
+  header{
+    position:sticky;top:0;z-index:10;
+    background:rgba(13,15,19,.86);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;gap:20px;height:60px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:700;letter-spacing:.2px}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+  .nav .links{margin-left:auto;display:flex;gap:22px;font-size:14.5px;color:var(--dim)}
+  .nav .links a:hover{color:var(--fg)}
+
+  /* Hero */
+  .hero{padding:78px 0 46px;text-align:center}
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;color:var(--dim);
+    border:1px solid var(--line);border-radius:999px;padding:6px 14px;margin-bottom:22px;
+  }
+  .badge b{color:var(--accent);font-weight:600}
+  h1{font-size:clamp(30px,5vw,50px);line-height:1.25;font-weight:800;letter-spacing:-.5px}
+  h1 em{font-style:normal;color:var(--accent)}
+  .sub{margin:20px auto 0;max-width:620px;color:var(--dim);font-size:17px}
+  .btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:32px}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 24px;border-radius:10px;font-size:15px;font-weight:600;
+    border:1px solid var(--line);background:var(--card);transition:.18s;
+  }
+  .btn:hover{border-color:#3a4150;transform:translateY(-1px)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{background:#ff7d1a}
+
+  /* 演示 */
+  .shot{
+    margin:44px auto 0;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    background:var(--card);box-shadow:0 24px 60px rgba(0,0,0,.45);
+  }
+  .shot img{display:block;width:100%}
+
+  section{padding:64px 0;border-top:1px solid var(--line)}
+  h2{font-size:26px;font-weight:750;margin-bottom:10px;letter-spacing:-.2px}
+  .lead{color:var(--dim);margin-bottom:32px;max-width:640px}
+
+  /* 卡片 */
+  .grid{display:grid;gap:16px}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:22px 22px 20px;transition:.18s;
+  }
+  .card:hover{border-color:#3a4150;transform:translateY(-2px)}
+  .card h3{font-size:16.5px;margin-bottom:8px;display:flex;align-items:center;gap:9px}
+  .card p{color:var(--dim);font-size:14.5px}
+  .num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:26px;height:26px;border-radius:8px;background:rgba(255,105,0,.14);
+    color:var(--accent);font-size:13px;font-weight:700;flex:none;
+  }
+
+  /* 指标 */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
+  .stat b{display:block;font-size:32px;color:var(--accent);letter-spacing:-1px}
+  .stat span{color:var(--dim);font-size:13.5px}
+
+  /* 代码 */
+  pre{
+    background:#0a0c10;border:1px solid var(--line);border-radius:12px;
+    padding:18px 20px;overflow-x:auto;font:13.5px/1.85 "Cascadia Code",Consolas,monospace;
+    color:#cfd6e4;
+  }
+  pre .c{color:#5d6675}
+  code.inline{background:#0a0c10;border:1px solid var(--line);border-radius:6px;padding:2px 7px;font-size:13.5px}
+
+  /* 截图 */
+  .gal{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .gal figure{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
+  .gal img{display:block;width:100%;height:auto}
+  .gal figcaption{padding:12px 16px;color:var(--dim);font-size:13.5px;border-top:1px solid var(--line)}
+
+  footer{border-top:1px solid var(--line);padding:34px 0 54px;color:var(--dim);font-size:14px}
+  footer .row{display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+  footer a:hover{color:var(--fg)}
+
+  @media (max-width:640px){
+    .nav .links{display:none}
+    .hero{padding:52px 0 30px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo"><span class="dot"></span>简历 — JD 匹配器</div>
+    <nav class="links">
+      <a href="#demo">演示</a>
+      <a href="#feature">能力</a>
+      <a href="#how">原理</a>
+      <a href="#eval">评测</a>
+      <a href="report.html">示例报告</a>
+      <a href="https://github.com/13716710623/resume-jd-matcher">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="badge">纯规则实现 · 不联网 · 不调模型 · <b>每一项结论可追溯到 JD 原句</b></div>
+    <h1>把简历和 JD 放进去<br><em>10 秒</em>拿到可解释的评估</h1>
+    <p class="sub">
+      匹配度与评级、缺哪些技能、简历哪部分写得不好、按优先级排的改进清单，
+      以及根据缺口预测的面试问题。
+    </p>
+    <div class="btns">
+      <a class="btn primary" href="https://github.com/13716710623/resume-jd-matcher">查看源码 →</a>
+      <a class="btn" href="report.html">看示例报告</a>
+      <a class="btn" href="#demo">看 90 秒演示</a>
+    </div>
+
+    <div class="shot" id="demo">
+      <img src="demo_preview_small.gif" alt="简历-JD 匹配器演示（前 9 秒）">
+    </div>
+    <p style="color:var(--dim);font-size:13.5px;margin-top:12px">
+      前 9 秒预览 ·
+      <a href="演示视频_成片.mp4" style="color:var(--accent)">观看 90 秒完整演示（配音 + 字幕）</a>
+    </p>
+  </div>
+
+</div>
+
+<section id="feature">
+  <div class="wrap">
+    <h2>它回答四个问题</h2>
+    <p class="lead">不是给一个分数就完事，而是把"为什么"拆到你能行动的程度。</p>
+    <div class="grid g2">
+      <div class="card">
+        <h3><span class="num">1</span>够不够格</h3>
+        <p>综合匹配度 + A/B/C/D 评级。权重按「必须 / 应该 / 加分」三档要求分级计算，而不是简单的关键词命中率。</p>
+      </div>
+      <div class="card">
+        <h3><span class="num">2</span>差在哪</h3>
+        <p>列出「已具备」和「缺失」的技能项，每个都回指 JD 里对应的那句话。同义词表覆盖 55 组常见写法。</p>
+      </div>
+      <div class="card">
+        <h3><span class="num">3</span>简历怎么改</h3>
+        <p>简历质量检查：篇幅、量化成果、项目描述、技能呈现。给结论也给依据。</p>
+      </div>
+      <div class="card">
+        <h3><span class="num">4</span>面试会问什么</h3>
+        <p>根据缺口生成预测问题，按「必须项缺口」优先排序，方便针对性准备。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <h2>为什么不用大模型</h2>
+    <p class="lead">
+      求职者要的不是"你 68 分"，而是"我这 68 分是怎么来的、改哪一句能变成 75 分"。
+      规则引擎能精确指到 JD 的具体句子，大模型给不了这种确定性。
+    </p>
+    <div class="grid g2">
+      <div class="card">
+        <h3>可追溯</h3>
+        <p>每一条结论都能定位到 JD 里的原句和简历里的对应表述，不用"感觉像是"。</p>
+      </div>
+      <div class="card">
+        <h3>可复现</h3>
+        <p>同样的输入永远得到同样的输出。规则是显式的，调参有据可查。</p>
+      </div>
+      <div class="card">
+        <h3>不联网、不花钱</h3>
+        <p>纯本地运行，简历内容不出机器。对隐私敏感的场景这点很重要。</p>
+      </div>
+      <div class="card">
+        <h3>启动成本低</h3>
+        <p>不需要 GPU、不需要 API key，<code class="inline">pip install</code> 之后就能跑。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="eval">
+  <div class="wrap">
+    <h2>实测数据</h2>
+    <p class="lead">诚实说明：调参用的样本和验证用的样本是分开的。</p>
+    <div class="stats">
+      <div class="stat"><b>80%</b><span>留出集 5 条中 4 条吻合</span></div>
+      <div class="stat"><b>32</b><span>条自动化测试</span></div>
+      <div class="stat"><b>~2000</b><span>行 Python</span></div>
+      <div class="stat"><b>18 ms</b><span>单次分析耗时</span></div>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <h3>关于那 80%</h3>
+      <p>
+        10 条标注样本里，用于调参的 10 条是「全中」——这是过拟合，不能拿来说事。
+        真正有意义的是 5 条留出集：4 条吻合，1 条（前端岗）失败，原因是技能词全部落在同义词表之外，
+        引擎只能标记为「未覆盖」，没有瞎猜。
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>界面</h2>
+    <p class="lead">网页版、桌面版、命令行三种入口，导出单文件 HTML 报告可直接发人。</p>
+    <div class="gal">
+      <figure>
+        <img src="screenshot-web.png" alt="网页版界面">
+        <figcaption>网页版：左边简历、右边 JD，点一下出结果</figcaption>
+      </figure>
+      <figure>
+        <img src="screenshot-report.png" alt="评估报告">
+        <figcaption>导出的报告：分项评分、要求分级、缺口清单</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>本地运行</h2>
+    <p class="lead">开源在 GitHub，克隆下来直接跑。</p>
+<pre><span class="c"># 1. 克隆</span>
+git clone https://github.com/13716710623/resume-jd-matcher.git
+cd resume-jd-matcher
+
+<span class="c"># 2. 装依赖（只用标准库 + 可选 scikit-learn）</span>
+pip install -r requirements.txt
+
+<span class="c"># 3. 三种用法</span>
+python web.py                    <span class="c"># 网页版 → http://127.0.0.1:8765</span>
+python gui.py                    <span class="c"># 桌面版</span>
+python cli.py --demo             <span class="c"># 命令行</span></pre>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap row">
+    <span>简历 — JD 匹配器</span>
+    <a href="https://github.com/13716710623/resume-jd-matcher">源代码</a>
+    <a href="report.html">示例报告</a>
+    <a href="https://github.com/13716710623/resume-jd-matcher#readme">文档</a>
+    <span style="margin-left:auto;font-size:13px">规则驱动 · 不联网 · 可解释</span>
+  </div>
+</footer>
+
+</body>
+</html>
